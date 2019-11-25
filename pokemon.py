@@ -109,7 +109,6 @@ def predict(PkDf, n):
 
 	return X, Y
 
-
 if __name__ == '__main__':
 	PkDf = get_data()
 	get_legendary(PkDf)
@@ -169,6 +168,20 @@ if __name__ == '__main__':
 	# pred = model.predict(x_test)
 	# score = model.evaluate(x_test, y_test)
 	# print(score[1])
+
+	from sklearn.cluster import KMeans
+	X = PkDf.loc[0:647, ['HP','SpecialAttack']]
+	y = PkDf.loc[0:750, 'Legendary']
+	y = list(y)
+	km = KMeans(n_clusters=2, random_state=0).fit(X)
+	# print(km.labels_)
+	pred = km.predict(PkDf.loc[648::, ['HP','SpecialAttack']])
+	y = list(PkDf.loc[648::, 'Legendary'])
+	acc = 0
+	for i in range(len(y)):
+		if y[i] == pred[i]:
+			acc += 1
+	print(acc/len(y))
 
 
 
